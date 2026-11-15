@@ -68,7 +68,7 @@ function renderStats() {
     : "의도: 없음";
 
   if (battleState.runComplete) {
-    statusText.textContent = "런 완료! 3회의 전투를 모두 마쳤습니다.";
+    statusText.textContent = `런 완료! ${MAX_BATTLES}회의 전투를 모두 마쳤습니다.`;
   } else if (battleState.rewardScreenOpen) {
     statusText.textContent = battleState.rewardClaimed
       ? (battleState.battleIndex >= MAX_BATTLES
@@ -204,7 +204,7 @@ function renderResult() {
   if (battleState.runComplete) {
     resultOverlay.classList.remove("hidden");
     resultTitle.textContent = "RUN COMPLETE";
-    resultMessage.textContent = `3회의 전투를 모두 완료했습니다. 최종 덱은 ${battleState.playerDeck.length}장입니다.`;
+    resultMessage.textContent = `${MAX_BATTLES}회의 전투를 모두 완료했습니다. 최종 덱은 ${battleState.playerDeck.length}장입니다.`;
     restartBtn.textContent = "새 런 시작";
     return;
   }
