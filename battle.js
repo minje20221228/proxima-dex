@@ -1,4 +1,4 @@
-const MAX_BATTLES = 3;
+const MAX_BATTLES = PROXIMA_CONFIG.battleCount;
 
 
 function createEnemy() {
@@ -6,9 +6,9 @@ function createEnemy() {
   // 전투가 바뀔 때마다 같은 설계의 '새 인스턴스'만 생성합니다.
   return {
     name: "Void Sentinel",
-    hp: 36,
-    maxHp: 36,
-    attack: 6,
+    hp: PROXIMA_CONFIG.enemyHp,
+    maxHp: PROXIMA_CONFIG.enemyHp,
+    attack: PROXIMA_CONFIG.enemyAttack,
     statusEffects: []
   };
 }
@@ -16,11 +16,11 @@ function createEnemy() {
 
 const battleState = {
   player: {
-    hp: 50,
-    maxHp: 50,
+    hp: PROXIMA_CONFIG.playerMaxHp,
+    maxHp: PROXIMA_CONFIG.playerMaxHp,
     shield: 0,
-    energy: 3,
-    maxEnergy: 3,
+    energy: PROXIMA_CONFIG.playerMaxEnergy,
+    maxEnergy: PROXIMA_CONFIG.playerMaxEnergy,
     statusEffects: []
   },
 
@@ -301,7 +301,7 @@ function endTurn() {
   preparePlayerTurn();
 
   battleState.isProcessingTurn = false;
-  addBattleLog(`${battleState.turn}턴 시작. 에너지 3, 카드 5장 준비.`);
+  addBattleLog(`${battleState.turn}턴 시작. 에너지 ${battleState.player.maxEnergy}, 카드 5장 준비.`);
   renderBattle();
 }
 
