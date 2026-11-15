@@ -17,6 +17,8 @@ const battleLog = document.getElementById("battleLog");
 
 const startBattleBtn = document.getElementById("startBattleBtn");
 const endTurnBtn = document.getElementById("endTurnBtn");
+const mobileEndTurnBtn = document.getElementById("mobileEndTurnBtn");
+const mobileHint = document.getElementById("mobileHint");
 const restartBtn = document.getElementById("restartBtn");
 
 const rewardOverlay = document.getElementById("rewardOverlay");
@@ -66,7 +68,7 @@ function renderStats() {
     : "의도: 없음";
 
   if (battleState.runComplete) {
-    statusText.textContent = "런 완료! 3회의 전투를 모두 마쳤습니다.";
+    statusText.textContent = `런 완료! ${MAX_BATTLES}회의 전투를 모두 마쳤습니다.`;
   } else if (battleState.rewardScreenOpen) {
     statusText.textContent = battleState.rewardClaimed
       ? (battleState.battleIndex >= MAX_BATTLES
@@ -125,6 +127,14 @@ function renderControls() {
     battleState.phase !== "player";
 
   endTurnBtn.disabled = disabled;
+  mobileEndTurnBtn.disabled = disabled;
+  mobileHint.textContent = battleState.runComplete
+    ? "3전투 완료"
+    : battleState.rewardScreenOpen
+      ? "보상 카드 1장을 선택하세요"
+      : battleState.battleFinished
+        ? "전투 종료"
+        : `에너지 ${battleState.player.energy} / ${battleState.player.maxEnergy} · 카드 선택 또는 턴 종료`;
 }
 
 
@@ -194,7 +204,7 @@ function renderResult() {
   if (battleState.runComplete) {
     resultOverlay.classList.remove("hidden");
     resultTitle.textContent = "RUN COMPLETE";
-    resultMessage.textContent = `3회의 전투를 모두 완료했습니다. 최종 덱은 ${battleState.playerDeck.length}장입니다.`;
+    resultMessage.textContent = `${MAX_BATTLES}회의 전투를 모두 완료했습니다. 최종 덱은 ${battleState.playerDeck.length}장입니다.`;
     restartBtn.textContent = "새 런 시작";
     return;
   }
@@ -216,6 +226,7 @@ function createCardButton(card) {
   button.type = "button";
   button.className = `card ${card.type}`;
 
+  button.setAttribute("aria-label", `${card.name}, 비용 ${card.cost}, ${card.description}`);
   button.innerHTML = `
     <div class="card-top">
       <div>
@@ -258,6 +269,7 @@ function escapeHtml(text) {
 
 startBattleBtn.addEventListener("click", startNewGame);
 endTurnBtn.addEventListener("click", endTurn);
+mobileEndTurnBtn.addEventListener("click", endTurn);
 restartBtn.addEventListener("click", startNewGame);
 skipRewardBtn.addEventListener("click", skipReward);
 nextBattleBtn.addEventListener("click", continueAfterReward);
