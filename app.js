@@ -17,6 +17,8 @@ const battleLog = document.getElementById("battleLog");
 
 const startBattleBtn = document.getElementById("startBattleBtn");
 const endTurnBtn = document.getElementById("endTurnBtn");
+const mobileEndTurnBtn = document.getElementById("mobileEndTurnBtn");
+const mobileHint = document.getElementById("mobileHint");
 const restartBtn = document.getElementById("restartBtn");
 
 const rewardOverlay = document.getElementById("rewardOverlay");
@@ -125,6 +127,14 @@ function renderControls() {
     battleState.phase !== "player";
 
   endTurnBtn.disabled = disabled;
+  mobileEndTurnBtn.disabled = disabled;
+  mobileHint.textContent = battleState.runComplete
+    ? "3전투 완료"
+    : battleState.rewardScreenOpen
+      ? "보상 카드 1장을 선택하세요"
+      : battleState.battleFinished
+        ? "전투 종료"
+        : `에너지 ${battleState.player.energy} / ${battleState.player.maxEnergy} · 카드 선택 또는 턴 종료`;
 }
 
 
@@ -216,6 +226,7 @@ function createCardButton(card) {
   button.type = "button";
   button.className = `card ${card.type}`;
 
+  button.setAttribute("aria-label", `${card.name}, 비용 ${card.cost}, ${card.description}`);
   button.innerHTML = `
     <div class="card-top">
       <div>
@@ -258,6 +269,7 @@ function escapeHtml(text) {
 
 startBattleBtn.addEventListener("click", startNewGame);
 endTurnBtn.addEventListener("click", endTurn);
+mobileEndTurnBtn.addEventListener("click", endTurn);
 restartBtn.addEventListener("click", startNewGame);
 skipRewardBtn.addEventListener("click", skipReward);
 nextBattleBtn.addEventListener("click", continueAfterReward);
